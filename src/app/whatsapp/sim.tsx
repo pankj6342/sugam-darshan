@@ -7,6 +7,7 @@ import { handleInput } from "@/lib/bot";
 import { DEMO_WA_PHONE, MANDAL_NAME_HI } from "@/lib/config";
 import { reportTime } from "@/lib/slots";
 import { useTemple } from "@/lib/temple-store";
+import { BASE } from "@/lib/base-path";
 import { fmtTime, ymd } from "@/lib/time";
 import type { WaButton, WaMessage } from "@/lib/types";
 
@@ -61,7 +62,7 @@ export function WhatsAppSim() {
   function tapButton(b: WaButton) {
     if (b.id === "yatra:open") {
       useTemple.getState().pushMessage({ phone, from: "user", text: b.label });
-      window.open(`/yatra?src=wa&d=${ymd()}`, "_blank");
+      window.open(`${BASE}/yatra/?src=wa&d=${ymd()}`, "_blank");
       return;
     }
     send({ buttonId: b.id, buttonLabel: b.label });
@@ -154,7 +155,7 @@ export function WhatsAppSim() {
             <li>Send <b>Hi</b> → book a free pass in ~6 taps</li>
             <li>Tap 🎤 to see the scoped voice-note fallback (human-assisted help)</li>
             <li>After the pass, one separate, optional Yatra message appears — never before</li>
-            <li>Open the <a className="font-semibold text-saffron-700 underline" href="/control" target="_blank">Control room</a> in another tab and start a Bhog pause → a Hindi delay message arrives here</li>
+            <li>Open the <a className="font-semibold text-saffron-700 underline" href={`${BASE}/control/`} target="_blank">Control room</a> in another tab and start a Bhog pause → a Hindi delay message arrives here</li>
           </ul>
         </Card>
         <Card className="space-y-3 p-5">

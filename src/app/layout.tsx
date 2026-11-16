@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Noto_Sans, Noto_Sans_Devanagari } from "next/font/google";
 import "./globals.css";
+import { BASE } from "@/lib/base-path";
 
 const noto = Noto_Sans({ variable: "--font-noto", subsets: ["latin"], weight: ["400", "500", "600", "700", "800"] });
 const deva = Noto_Sans_Devanagari({ variable: "--font-deva", subsets: ["devanagari"], weight: ["400", "500", "600", "700", "800"] });
@@ -9,11 +10,8 @@ export const metadata: Metadata = {
   title: "Sugam Darshan — Prototype",
   description: "Clickable prototype: Shri Sanwaliya Seth Sugam Darshan & Yatra Companion",
   applicationName: "Sugam Darshan",
+  manifest: `${BASE}/manifest.webmanifest`,
 };
-
-// Prototype: every screen reads its state from browser storage, so routes render client-side
-// only in the browser by design. Opt out of instant-navigation / static-shell validation.
-export const instant = false;
 
 export const viewport: Viewport = {
   themeColor: "#7c2d12",

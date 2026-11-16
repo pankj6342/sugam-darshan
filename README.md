@@ -8,6 +8,9 @@ npm install
 npm run dev   # http://localhost:3000 — demo console with links to every screen
 ```
 
+Hosted build: pushing to `main` runs `.github/workflows/pages.yml`, which exports a static
+site (`PAGES_BASE_PATH=/<repo> npm run build` → `out/`) and publishes it to GitHub Pages.
+
 There is **no backend**. All state is sample data kept in this browser's storage and synced
 across tabs, so open several screens side by side (e.g. WhatsApp + Control room + Gate).
 Use **↺ Reset demo data** on the home page to start fresh.
