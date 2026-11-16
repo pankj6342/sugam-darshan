@@ -28,6 +28,23 @@ Use **↺ Reset demo data** on the home page to start fresh.
 | `/partner` | Partner portal — voucher redemption, bookings, commission ledger, leakage flags | C-06, C-07 |
 | `/kpi` | Pilot KPI report vs BRD §2 targets | §2 |
 
+## Languages (NFR-03)
+
+Hindi is the default everywhere devotees see text. Gujarati and English are optional:
+
+- **PWA** — हिं / ગુ / EN switch in the header (`src/lib/i18n.ts`).
+- **WhatsApp** — menu option 5, or simply writing in Gujarati script, switches the chat; the pass,
+  reminders and ritual-delay messages then follow the language the pass was booked in
+  (`src/lib/messages.ts`).
+- **Sahayata Kendra slip** — volunteer picks हिंदी / ગુજરાતી before printing.
+
+## Installing the PWA
+
+Open `/darshan/` on a phone. Chrome / Edge / Android show **⬇ Install app** in the header (or the
+browser's own install menu). iPhone Safari has no install prompt: Share ⬆️ → *Add to Home Screen*
+(the button explains this). A service worker (`public/sw.js`, production builds only) caches the
+app so it opens offline after the first visit.
+
 ## How the BRD guardrails show up
 
 - **Two separate data domains** — `src/lib/temple-store.ts` (Mandal) and `src/lib/yatra-store.ts`
@@ -45,4 +62,3 @@ Use **↺ Reset demo data** on the home page to start fresh.
 - WhatsApp, OTP and UPI are simulated. Crowd telemetry is simulated.
 - Darshan windows, Aarti timings, batch size/interval and the "20% cap" are illustrative and need
   Mandal sign-off (BRD 8.3). Listings and names are fictional.
-- English + Hindi only; Gujarati is an optional later addition (NFR-03).

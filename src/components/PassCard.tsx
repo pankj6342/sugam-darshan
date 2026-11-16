@@ -1,7 +1,6 @@
 "use client";
 import { QR } from "./QR";
 import { Emblem } from "./Emblem";
-import { REPORTING_POINT_EN, REPORTING_POINT_HI } from "@/lib/config";
 import { effectiveBatch, reportTime } from "@/lib/slots";
 import { fmtDate, fmtTime } from "@/lib/time";
 import { tr } from "@/lib/i18n";
@@ -18,7 +17,7 @@ export function PassCard({ pass, cfg, lang, compact = false }: { pass: Pass; cfg
         <div className="min-w-0 leading-tight">
           <div className={`font-bold ${compact ? "text-sm" : ""}`}>{tr("mandal", lang)}</div>
           <div className="text-xs text-amber-200">
-            {isGuest ? (lang === "hi" ? "मंडल अतिथि पास" : "Mandal Atithi guest pass") : `${tr("sugam", lang)} · ${tr("free", lang)}`}
+            {isGuest ? tr("guestPass", lang) : `${tr("sugam", lang)} · ${tr("free", lang)}`}
           </div>
         </div>
       </div>
@@ -33,18 +32,18 @@ export function PassCard({ pass, cfg, lang, compact = false }: { pass: Pass; cfg
           </div>
           <div className="flex gap-4">
             <div>
-              <dt className="text-stone-500">{lang === "hi" ? "नाम" : "Name"}</dt>
+              <dt className="text-stone-500">{tr("lblName", lang)}</dt>
               <dd className="font-semibold">{pass.name}</dd>
             </div>
             <div>
-              <dt className="text-stone-500">{lang === "hi" ? "संख्या" : "Group"}</dt>
+              <dt className="text-stone-500">{tr("lblGroup", lang)}</dt>
               <dd className="font-semibold">
                 {pass.groupSize} {tr("persons", lang)}
               </dd>
             </div>
           </div>
           <div>
-            <dt className="text-stone-500">{lang === "hi" ? "दिन" : "Date"}</dt>
+            <dt className="text-stone-500">{tr("lblDate", lang)}</dt>
             <dd className="font-semibold">{fmtDate(pass.date, lang)}</dd>
           </div>
           <div className="rounded-lg bg-saffron-50 px-2.5 py-1.5 ring-1 ring-saffron-200">
@@ -62,7 +61,7 @@ export function PassCard({ pass, cfg, lang, compact = false }: { pass: Pass; cfg
           {!compact && (
             <div>
               <dt className="text-stone-500">{tr("where", lang)}</dt>
-              <dd>{lang === "hi" ? REPORTING_POINT_HI : REPORTING_POINT_EN}</dd>
+              <dd>{tr("reportingPoint", lang)}</dd>
             </div>
           )}
         </dl>

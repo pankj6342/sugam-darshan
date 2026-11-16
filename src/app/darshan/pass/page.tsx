@@ -54,7 +54,7 @@ export default function PassPage() {
               tone="secondary"
               className="text-red-700"
               onClick={() => {
-                if (confirm(lang === "hi" ? "क्या आप यह पास रद्द करना चाहते हैं?" : "Cancel this pass?")) cancelPass(pass.id);
+                if (confirm(t("cancelConfirm"))) cancelPass(pass.id);
               }}
             >
               {t("cancel")}
@@ -72,18 +72,16 @@ export default function PassPage() {
           <div className="pt-4 print:hidden">
             <div className="mb-3 flex items-center gap-3 text-xs text-stone-400">
               <div className="h-px flex-1 bg-stone-300" />
-              {lang === "hi" ? "वैकल्पिक · दर्शन से असंबंधित" : "Optional · unrelated to darshan"}
+              {t("optDivider")}
               <div className="h-px flex-1 bg-stone-300" />
             </div>
             <div className="rounded-2xl bg-teal-50 p-4 ring-1 ring-teal-200">
               <div className="flex items-start gap-3">
                 <YatraMark size={40} />
                 <div className="text-sm text-teal-950">
-                  <div className="font-bold">{lang === "hi" ? "यात्रा साथी — ठहरने व भोजन की जानकारी" : "Yatra Companion — stays & meals nearby"}</div>
+                  <div className="font-bold">{t("yatraTitle")}</div>
                   <p className="mt-1">
-                    {lang === "hi"
-                      ? "सत्यापित शुद्ध-शाकाहारी धर्मशाला/होटल और भोजनालय। यह एक अलग सेवा है — इसका आपके निःशुल्क पास, बैच या प्रवेश पर कोई असर नहीं है।"
-                      : "Verified pure-veg stays and eateries. This is a separate service — it has no effect on your free pass, batch or entry."}
+                    {t("yatraBody")}
                   </p>
                 </div>
               </div>
@@ -91,7 +89,7 @@ export default function PassPage() {
                 href={`/yatra?src=pwa&d=${pass.date}`}
                 className="mt-3 block rounded-xl bg-white px-4 py-2.5 text-center text-sm font-semibold text-teal-800 ring-1 ring-teal-300 hover:bg-teal-100"
               >
-                {lang === "hi" ? "देखें (वैकल्पिक) ↗" : "Have a look (optional) ↗"}
+                {t("yatraCta")}
               </Link>
             </div>
           </div>

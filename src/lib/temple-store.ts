@@ -8,8 +8,10 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { DEFAULT_CONFIG } from "./config";
+import { tr } from "./i18n";
 import { assignBatch, effectiveBatch, reportTime } from "./slots";
-import { at, fmtTime, hmToMin, nowMin, ymd } from "./time";
+import { at, hmToMin, nowMin, ymd } from "./time";
+import { M, reminderText, ritualText } from "./messages";
 import { shortId, signPass } from "./token";
 import type {
   AuditEntry,
@@ -79,10 +81,6 @@ function activeDuplicate(passes: Pass[], mobile: string, date: string, ignoreId?
   return passes.find((p) => p.mobile === mobile && p.date === date && p.status === "active" && p.id !== ignoreId && p.channel !== "guest");
 }
 
-export function delayMessageHi(p: Pass, cfg: OpsConfig, reason: RitualPause["reason"]) {
-  const what = reason === "bhog" ? "ठाकुरजी के राजभोग का समय है" : reason === "aarti" ? "ठाकुरजी की आरती का समय है" : "मंदिर व्यवस्था हेतु दर्शन कुछ समय के लिए रुके हैं";
-  return `🙏 ${what}। कृपया शांतिपूर्वक प्रतीक्षा करें।\n\nपास ${p.id} — आपका नया रिपोर्टिंग समय: *${fmtTime(reportTime(p, cfg), "hi")}*\n(बैच प्रवेश: ${fmtTime(effectiveBatch(p), "hi")})\n\nसमय में फिर बदलाव होने पर हम आपको यहीं सूचित करेंगे।`;
-}
 
 export const useTemple = create<TempleState>()(
   persist(
@@ -106,7 +104,7 @@ export const useTemple = create<TempleState>()(
         if (!batchTime) return { ok: false, error: "full" };
         const base = {
           id: shortId(i.channel === "guest" ? "MA" : "SD"),
-          name: i.name.trim() || (i.lang === "hi" ? "श्रद्धालु" : "Devotee"),
+          name: i.name.trim() || tr("devotee", i.lang),
           mobile: i.mobile,
           groupSize: i.groupSize,
           date: i.date,
@@ -199,7 +197,7 @@ export const useTemple = create<TempleState>()(
         set({ passes: updated, pause: { active: true, reason, since: Date.now(), expectedMin, by: role } });
         for (const p of updated) {
           if (p.status === "active" && p.date === today && p.delayMin && p.mobile && passes.find((o) => o.id === p.id)?.delayMin !== p.delayMin) {
-            get().pushMessage({ phone: p.mobile, from: "bot", text: delayMessageHi(p, config, reason), kind: "ritual" });
+            get().pushMessage({ phone: p.mobile, from: "bot", text: ritualText(p, config, reason), kind: "ritual" });
             notified++;
           }
         }
@@ -257,8 +255,8 @@ export const useTemple = create<TempleState>()(
             phone: p.mobile,
             from: "bot",
             kind: "reminder",
-            text: `🔔 *दर्शन स्मरण* — जय श्री सांवलिया सेठ!\n\nआपका सुगम दर्शन बैच जल्द आने वाला है।\nपास: ${p.id} · ${p.groupSize} व्यक्ति\nरिपोर्टिंग समय: *${fmtTime(reportTime(p, config), "hi")}*\n\nकृपया अपना QR पास तैयार रखें।`,
-            buttons: [{ id: "mypass", label: "मेरा पास देखें" }],
+            text: reminderText(p, config),
+            buttons: [{ id: "mypass", label: M(p.lang).bMyPassView }],
           });
           n++;
         }

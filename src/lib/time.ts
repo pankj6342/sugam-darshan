@@ -33,7 +33,7 @@ export function at(date: string, hm: string): number {
   return d.getTime();
 }
 
-const locale = (lang: Lang) => (lang === "hi" ? "hi-IN" : "en-IN");
+const locale = (lang: Lang) => (lang === "hi" ? "hi-IN" : lang === "gu" ? "gu-IN" : "en-IN");
 
 export function fmtDate(date: string, lang: Lang, opts?: { short?: boolean }): string {
   return new Intl.DateTimeFormat(locale(lang), {
@@ -51,6 +51,10 @@ export function fmtTime(hm: string, lang: Lang): string {
   const h12 = h % 12 === 0 ? 12 : h % 12;
   const mm = m ? `:${pad(m)}` : "";
   if (lang === "en") return `${h12}${m ? `:${pad(m)}` : ""} ${h < 12 ? "AM" : "PM"}`;
+  if (lang === "gu") {
+    const gp = h < 4 ? "રાત્રે" : h < 12 ? "સવારે" : h < 16 ? "બપોરે" : h < 19 ? "સાંજે" : "રાત્રે";
+    return `${gp} ${h12}${mm} વાગ્યે`;
+  }
   const part = h < 4 ? "रात" : h < 12 ? "सुबह" : h < 16 ? "दोपहर" : h < 19 ? "शाम" : "रात";
   return `${part} ${h12}${mm} बजे`;
 }

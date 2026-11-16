@@ -1,6 +1,6 @@
 // ───────────────────────── Sacred domain (Mandir Mandal data) ─────────────────────────
 
-export type Lang = "hi" | "en";
+export type Lang = "hi" | "gu" | "en";
 export type Channel = "whatsapp" | "pwa" | "kendra" | "guest";
 export type PassStatus = "active" | "used" | "cancelled" | "rescheduled";
 export type Role = "ceo" | "manager" | "police" | "gate_lead" | "trustee" | "operator";
@@ -89,6 +89,7 @@ export interface WaSession {
     | "reschedule-pick"
     | "reschedule-window";
   draft: { date?: string; windowStart?: string; people?: number; name?: string; passId?: string };
+  lang?: Lang; // conversation language (hi default, gu optional)
 }
 
 export interface GateEvent {

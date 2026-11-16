@@ -5,10 +5,10 @@ import { PassCard } from "@/components/PassCard";
 import { Button, Card, Note } from "@/components/ui";
 import { handleInput } from "@/lib/bot";
 import { DEMO_WA_PHONE, MANDAL_NAME_HI } from "@/lib/config";
-import { reportTime } from "@/lib/slots";
+import { M, botLang, reminderText } from "@/lib/messages";
 import { useTemple } from "@/lib/temple-store";
 import { BASE } from "@/lib/base-path";
-import { fmtTime, ymd } from "@/lib/time";
+import { ymd } from "@/lib/time";
 import type { WaButton, WaMessage } from "@/lib/types";
 
 /** Render WhatsApp-style *bold* and line breaks. */
@@ -75,8 +75,8 @@ export function WhatsAppSim() {
       phone,
       from: "bot",
       kind: "reminder",
-      text: `🔔 *दर्शन स्मरण* — जय श्री सांवलिया सेठ!\n\nआपका सुगम दर्शन बैच जल्द आने वाला है।\nपास: ${p.id} · ${p.groupSize} व्यक्ति\nरिपोर्टिंग समय: *${fmtTime(reportTime(p, cfg), "hi")}*\n\nकृपया अपना QR पास तैयार रखें।`,
-      buttons: [{ id: "mypass", label: "मेरा पास देखें" }],
+      text: reminderText(p, cfg),
+      buttons: [{ id: "mypass", label: M(p.lang).bMyPassView }],
     });
   }
 
@@ -153,6 +153,7 @@ export function WhatsAppSim() {
           </p>
           <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-stone-700">
             <li>Send <b>Hi</b> → book a free pass in ~6 taps</li>
+            <li>Send <b>5</b> or write in Gujarati (<b>જય શ્રી સાંવલિયા શેઠ</b>) → the whole conversation, pass and later reminders switch to Gujarati</li>
             <li>Tap 🎤 to see the scoped voice-note fallback (human-assisted help)</li>
             <li>After the pass, one separate, optional Yatra message appears — never before</li>
             <li>Open the <a className="font-semibold text-saffron-700 underline" href={`${BASE}/control/`} target="_blank">Control room</a> in another tab and start a Bhog pause → a Hindi delay message arrives here</li>
@@ -190,7 +191,7 @@ function Bubble({ m, live, onTap, disabled, cfg }: { m: WaMessage; live: boolean
       <div className={`max-w-[88%] rounded-lg px-2.5 pb-1 pt-1.5 text-[14.5px] leading-snug shadow-sm ${mine ? "rounded-tr-none bg-[#d9fdd3]" : "rounded-tl-none bg-white"} ${accent}`}>
         {pass && (
           <div className="mb-2 w-[300px] max-w-full">
-            <PassCard pass={pass} cfg={cfg} lang="hi" compact />
+            <PassCard pass={pass} cfg={cfg} lang={botLang(pass.lang)} compact />
           </div>
         )}
         <div>{waText(m.text)}</div>

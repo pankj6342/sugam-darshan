@@ -1,10 +1,11 @@
 "use client";
 import Link from "next/link";
-import type { ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { Emblem } from "@/components/Emblem";
-import { useT, useLang } from "@/lib/i18n";
+import { InstallButton } from "@/components/Pwa";
+import { LANGS, useT, useLang } from "@/lib/i18n";
 import { useTemple } from "@/lib/temple-store";
 
 /** Pass ids created on this device ("My passes"). */
@@ -16,6 +17,9 @@ export function MandirShell({ children }: { children: ReactNode }) {
   const { t, lang } = useT();
   const setLang = useLang((s) => s.setLang);
   const openFlow = useTemple((s) => s.openFlow);
+  useEffect(() => {
+    document.documentElement.lang = lang;
+  }, [lang]);
   return (
     <div className="mx-auto flex min-h-screen max-w-xl flex-col bg-cream">
       <header className="sticky top-0 z-10 bg-mandir text-white shadow print:hidden">
@@ -29,15 +33,17 @@ export function MandirShell({ children }: { children: ReactNode }) {
               </div>
             </div>
           </Link>
-          <div className="flex overflow-hidden rounded-lg ring-1 ring-amber-200/60" role="group" aria-label="Language">
-            {(["hi", "en"] as const).map((l) => (
+          <InstallButton label={t("install")} iosHelp={t("installIos")} />
+          <div className="flex overflow-hidden rounded-lg ring-1 ring-amber-200/60" role="group" aria-label="Language / भाषा / ભાષા">
+            {LANGS.map((l) => (
               <button
-                key={l}
-                onClick={() => setLang(l)}
-                className={`px-2.5 py-1.5 text-xs font-bold ${lang === l ? "bg-amber-300 text-mandir" : "text-amber-100"}`}
-                aria-pressed={lang === l}
+                key={l.code}
+                onClick={() => setLang(l.code)}
+                title={l.label}
+                className={`px-2 py-1.5 text-xs font-bold ${lang === l.code ? "bg-amber-300 text-mandir" : "text-amber-100"}`}
+                aria-pressed={lang === l.code}
               >
-                {l === "hi" ? "हिं" : "EN"}
+                {l.short}
               </button>
             ))}
           </div>
@@ -46,7 +52,7 @@ export function MandirShell({ children }: { children: ReactNode }) {
       {openFlow?.active && <div className="bg-red-700 px-4 py-2.5 text-sm font-semibold text-white">⚠️ {t("openFlow")}</div>}
       <main className="flex-1 px-4 py-5">{children}</main>
       <footer className="px-4 pb-6 pt-2 text-center text-xs text-stone-500 print:hidden">
-        © {t("mandal")} · {lang === "hi" ? "आधिकारिक निःशुल्क सेवा" : "Official free service"}
+        © {t("mandal")} · {t("officialFree")}
       </footer>
     </div>
   );

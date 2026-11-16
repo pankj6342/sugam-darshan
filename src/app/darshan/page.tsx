@@ -24,7 +24,7 @@ export default function DarshanHome() {
   return (
     <div className="space-y-5">
       <section className="rounded-3xl bg-gradient-to-br from-saffron-500 to-mandir p-6 text-white shadow-lg">
-        <div className="text-sm font-semibold text-amber-200">🙏 जय श्री सांवलिया सेठ</div>
+        <div className="text-sm font-semibold text-amber-200">{t("jai")}</div>
         <h1 className="mt-2 text-3xl font-extrabold leading-tight">{t("sugam")}</h1>
         <p className="mt-1 text-amber-50">{t("tagline")}</p>
         <Link
@@ -59,7 +59,7 @@ export default function DarshanHome() {
         <div>
           <div className="text-sm text-stone-500">{t("crowdNow")}</div>
           <div className="text-xl font-bold">
-            {outage ? (lang === "hi" ? "जानकारी उपलब्ध नहीं" : "Unavailable") : t(`crowd_${level}`)}
+            {outage ? t("unavailable") : t(`crowd_${level}`)}
           </div>
         </div>
         <Badge tone={outage ? "stone" : level === "high" ? "red" : level === "medium" ? "amber" : "green"}>{outage ? "—" : t("estimated")}</Badge>
@@ -72,7 +72,7 @@ export default function DarshanHome() {
             const past = hmToMin(a.time) < now;
             return (
               <li key={a.time} className={`flex justify-between gap-3 text-sm ${past ? "text-stone-400" : ""}`}>
-                <span>{lang === "hi" ? a.hi : a.en}</span>
+                <span>{a[lang]}</span>
                 <span className="shrink-0 font-semibold">{fmtTime(a.time, lang)}</span>
               </li>
             );

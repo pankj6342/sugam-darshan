@@ -1,12 +1,19 @@
 {
+  "id": "./darshan/",
   "name": "सुगम दर्शन — श्री सांवलिया सेठ मंदिर मंडल",
   "short_name": "सुगम दर्शन",
-  "description": "निःशुल्क सुगम दर्शन पास — Shri Sanwaliya Seth Mandir Mandal (prototype)",
+  "description": "निःशुल्क सुगम दर्शन पास · નિઃશુલ્ક સુગમ દર્શન પાસ · Free darshan pass — Shri Sanwaliya Seth Mandir Mandal (prototype)",
   "start_url": "./darshan/",
   "scope": "./",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#fbf7ef",
   "theme_color": "#7c2d12",
   "lang": "hi",
-  "icons": [{ "src": "favicon.ico", "sizes": "any", "type": "image/x-icon" }]
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
 }

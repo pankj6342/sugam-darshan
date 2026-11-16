@@ -34,11 +34,11 @@ export const DARSHAN_WINDOWS: { start: string; end: string }[] = [
 ];
 
 export const AARTI_SCHEDULE = [
-  { time: "05:30", hi: "मंगला आरती", en: "Mangla Aarti" },
-  { time: "07:30", hi: "श्रृंगार दर्शन", en: "Shringar Darshan" },
-  { time: "12:00", hi: "राजभोग (दर्शन बंद 12:00–14:30)", en: "Rajbhog (darshan closed 12:00–2:30)" },
-  { time: "18:45", hi: "संध्या आरती", en: "Sandhya Aarti" },
-  { time: "23:00", hi: "शयन आरती", en: "Shayan Aarti" },
+  { time: "05:30", hi: "मंगला आरती", gu: "મંગળા આરતી", en: "Mangla Aarti" },
+  { time: "07:30", hi: "श्रृंगार दर्शन", gu: "શૃંગાર દર્શન", en: "Shringar Darshan" },
+  { time: "12:00", hi: "राजभोग (दर्शन बंद 12:00–14:30)", gu: "રાજભોગ (દર્શન બંધ 12:00–14:30)", en: "Rajbhog (darshan closed 12:00–2:30)" },
+  { time: "18:45", hi: "संध्या आरती", gu: "સંધ્યા આરતી", en: "Sandhya Aarti" },
+  { time: "23:00", hi: "शयन आरती", gu: "શયન આરતી", en: "Shayan Aarti" },
 ];
 
 export const ROLE_LABEL: Record<Role, string> = {
@@ -62,9 +62,13 @@ export const KENDRA_VOLUNTEERS = ["Ramesh ji (Seva Dal)", "Sunita ji (Seva Dal)"
 export const SAHAYATA_KENDRA_LOCATION_HI = "मुख्य पार्किंग के पास, सुगम दर्शन सहायता केंद्र";
 export const REPORTING_POINT_HI = "सुगम दर्शन लेन — रिपोर्टिंग पॉइंट (गेट नं. 2 के पास)";
 export const REPORTING_POINT_EN = "Sugam Darshan lane reporting point (near Gate 2)";
+export const REPORTING_POINT_GU = "સુગમ દર્શન લેન — રિપોર્ટિંગ પોઈન્ટ (ગેટ નં. 2 પાસે)";
+export const SAHAYATA_KENDRA_LOCATION_GU = "મુખ્ય પાર્કિંગ પાસે, સુગમ દર્શન સહાયતા કેન્દ્ર";
 
 export const MANDAL_NAME_HI = "श्री सांवलिया सेठ मंदिर मंडल";
 export const MANDAL_NAME_EN = "Shri Sanwaliya Seth Mandir Mandal";
 export const MANDAL_PLACE_HI = "मंडफिया, चित्तौड़गढ़ (राज.)";
+export const MANDAL_NAME_GU = "શ્રી સાંવલિયા શેઠ મંદિર મંડળ";
+export const MANDAL_PLACE_GU = "મંડફિયા, ચિત્તોડગઢ (રાજ.)";
 
 export const DEMO_WA_PHONE = "9876543210";

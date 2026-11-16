@@ -3,7 +3,7 @@ import { useMemo, useRef, useState } from "react";
 import { Emblem } from "@/components/Emblem";
 import { QR } from "@/components/QR";
 import { Badge, Button, Card, Note } from "@/components/ui";
-import { KENDRA_VOLUNTEERS, MANDAL_NAME_HI, MANDAL_PLACE_HI, REPORTING_POINT_HI } from "@/lib/config";
+import { KENDRA_VOLUNTEERS, MANDAL_NAME_GU, MANDAL_NAME_HI, MANDAL_PLACE_GU, MANDAL_PLACE_HI, REPORTING_POINT_GU, REPORTING_POINT_HI } from "@/lib/config";
 import { bookableDates, effectiveBatch, nextAvailableWindow, reportTime, windowsFor } from "@/lib/slots";
 import { useTemple } from "@/lib/temple-store";
 import { fmtDate, fmtTime, ymd } from "@/lib/time";
@@ -21,6 +21,7 @@ export function Kendra() {
   const [mobile, setMobile] = useState("");
   const [noPhone, setNoPhone] = useState(false);
   const [group, setGroup] = useState(1);
+  const [slipLang, setSlipLang] = useState<"hi" | "gu">("hi");
   const [date, setDate] = useState(ymd());
   const [win, setWin] = useState<string | "auto">("auto");
   const [last, setLast] = useState<{ pass: Pass; secs: number } | null>(null);
@@ -39,7 +40,7 @@ export function Kendra() {
     if (!chosen) return;
     setErr(null);
     const t0 = started.current ?? Date.now();
-    const r = await createPass({ name, mobile: noPhone ? "" : mobile, groupSize: group, date, windowStart: chosen, channel: "kendra", lang: "hi", issuedBy: volunteer });
+    const r = await createPass({ name, mobile: noPhone ? "" : mobile, groupSize: group, date, windowStart: chosen, channel: "kendra", lang: slipLang, issuedBy: volunteer });
     if (!r.ok) {
       setErr(r.error === "duplicate" ? "इस मोबाइल नंबर पर इस दिन का पास पहले से है। / This number already has a pass for that day." : "यह समय भर गया — दूसरा चुनें। / Slot just filled — pick another.");
       return;
@@ -101,6 +102,22 @@ export function Kendra() {
                     <input type="checkbox" checked={noPhone} onChange={(e) => setNoPhone(e.target.checked)} className="h-5 w-5" />
                     फ़ोन नहीं है — केवल काग़ज़ की पर्ची
                   </label>
+                </div>
+              </div>
+
+              <div>
+                <span className="text-sm font-semibold">पर्ची की भाषा · Slip language</span>
+                <div className="mt-2 grid grid-cols-2 gap-2 sm:w-80">
+                  {(
+                    [
+                      ["hi", "हिंदी"],
+                      ["gu", "ગુજરાતી"],
+                    ] as const
+                  ).map(([code, label]) => (
+                    <button key={code} onClick={() => setSlipLang(code)} className={`rounded-xl py-3 text-lg font-bold ring-2 ${slipLang === code ? "bg-saffron-600 text-white ring-saffron-600" : "bg-white ring-stone-200"}`}>
+                      {label}
+                    </button>
+                  ))}
                 </div>
               </div>
 
@@ -196,14 +213,45 @@ export function Kendra() {
   );
 }
 
-/** Black & white 80mm slip — Mandal identity only. */
+const SLIP = {
+  hi: {
+    mandal: MANDAL_NAME_HI,
+    place: MANDAL_PLACE_HI,
+    title: "सुगम दर्शन पास · निःशुल्क",
+    name: "नाम",
+    persons: "व्यक्ति",
+    day: "दिन",
+    batch: "बैच प्रवेश",
+    report: "रिपोर्टिंग समय",
+    point: REPORTING_POINT_HI,
+    rules: ["यह पर्ची बस टिकट की तरह संभालकर रखें।", "बुलाए जाने पर पंक्ति में आएँ, गार्ड को पर्ची दिखाएँ।", "यह सेवा पूरी तरह निःशुल्क है — किसी को पैसे न दें।"],
+    jai: "जय श्री सांवलिया सेठ 🙏",
+  },
+  gu: {
+    mandal: MANDAL_NAME_GU,
+    place: MANDAL_PLACE_GU,
+    title: "સુગમ દર્શન પાસ · નિઃશુલ્ક",
+    name: "નામ",
+    persons: "વ્યક્તિ",
+    day: "દિવસ",
+    batch: "બેચ પ્રવેશ",
+    report: "રિપોર્ટિંગ સમય",
+    point: REPORTING_POINT_GU,
+    rules: ["આ પરચી બસ ટિકિટની જેમ સાચવીને રાખો.", "બોલાવવામાં આવે ત્યારે લાઇનમાં આવો, ગાર્ડને પરચી બતાવો.", "આ સેવા સંપૂર્ણ નિઃશુલ્ક છે — કોઈને પૈસા ન આપો."],
+    jai: "જય શ્રી સાંવલિયા શેઠ 🙏",
+  },
+} as const;
+
+/** Black & white 80mm slip — Mandal identity only. Printed in the devotee's chosen language. */
 function Slip({ pass, cfg }: { pass: Pass; cfg: OpsConfig }) {
+  const l = pass.lang === "gu" ? "gu" : "hi";
+  const x = SLIP[l];
   return (
     <div className="mx-auto w-[72mm] max-w-full bg-white p-2 font-sans text-black ring-1 ring-stone-300 print:ring-0">
       <div className="text-center leading-tight">
-        <div className="text-[13px] font-bold">{MANDAL_NAME_HI}</div>
-        <div className="text-[10px]">{MANDAL_PLACE_HI}</div>
-        <div className="mt-1 border-y border-black py-0.5 text-[12px] font-bold">सुगम दर्शन पास · निःशुल्क</div>
+        <div className="text-[13px] font-bold">{x.mandal}</div>
+        <div className="text-[10px]">{x.place}</div>
+        <div className="mt-1 border-y border-black py-0.5 text-[12px] font-bold">{x.title}</div>
       </div>
       <div className="my-2 flex justify-center">
         <QR value={pass.token} size={150} />
@@ -211,23 +259,25 @@ function Slip({ pass, cfg }: { pass: Pass; cfg: OpsConfig }) {
       <div className="text-center font-mono text-lg font-bold tracking-widest">{pass.id}</div>
       <table className="mt-1 w-full text-[12px]">
         <tbody>
-          <tr><td>नाम</td><td className="text-right font-semibold">{pass.name}</td></tr>
-          <tr><td>व्यक्ति</td><td className="text-right font-semibold">{pass.groupSize}</td></tr>
-          <tr><td>दिन</td><td className="text-right font-semibold">{fmtDate(pass.date, "hi", { short: true })}</td></tr>
-          <tr><td>बैच प्रवेश</td><td className="text-right font-semibold">{fmtTime(effectiveBatch(pass), "hi")}</td></tr>
+          <tr><td>{x.name}</td><td className="text-right font-semibold">{pass.name}</td></tr>
+          <tr><td>{x.persons}</td><td className="text-right font-semibold">{pass.groupSize}</td></tr>
+          <tr><td>{x.day}</td><td className="text-right font-semibold">{fmtDate(pass.date, l, { short: true })}</td></tr>
+          <tr><td>{x.batch}</td><td className="text-right font-semibold">{fmtTime(effectiveBatch(pass), l)}</td></tr>
         </tbody>
       </table>
       <div className="mt-1 border-2 border-black p-1 text-center">
-        <div className="text-[11px]">रिपोर्टिंग समय</div>
-        <div className="text-xl font-extrabold">{fmtTime(reportTime(pass, cfg), "hi")}</div>
+        <div className="text-[11px]">{x.report}</div>
+        <div className="text-xl font-extrabold">{fmtTime(reportTime(pass, cfg), l)}</div>
       </div>
       <div className="mt-1 text-[10.5px] leading-snug">
-        📍 {REPORTING_POINT_HI}
-        <br />• यह पर्ची बस टिकट की तरह संभालकर रखें।
-        <br />• बुलाए जाने पर पंक्ति में आएँ, गार्ड को पर्ची दिखाएँ।
-        <br />• यह सेवा पूरी तरह निःशुल्क है — किसी को पैसे न दें।
+        📍 {x.point}
+        {x.rules.map((r) => (
+          <span key={r}>
+            <br />• {r}
+          </span>
+        ))}
       </div>
-      <div className="mt-1 text-center text-[9px]">जय श्री सांवलिया सेठ 🙏</div>
+      <div className="mt-1 text-center text-[9px]">{x.jai}</div>
     </div>
   );
 }
